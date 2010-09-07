@@ -76,6 +76,7 @@ for item in items:
 		print page
 	except Exception, detail: 
 		print detail 
+		sys.exit(2)
 	
 	time.sleep(1) # don't overload the Tumblr API
 	
