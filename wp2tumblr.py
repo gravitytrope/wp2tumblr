@@ -13,12 +13,12 @@ import urllib, urllib2, time, sys, os, getopt, types
 
 tumblr_credentials = {}
 tumblr_api = 'http://www.tumblr.com/api/write'
-USAGE = 'Useage: python wp2tumblr.py -u [tumblr email address] -p [tumblr passwordd] wordpress-xml-export-path'
+USAGE = 'Useage: python wp2tumblr.py -u tumblr-email-address -p tumblr-passwordd [-g blog-url] wordpress-xml-export-path'
 
 
 # check the command arguments
 try:
-	login_opts, file_path = getopt.getopt(sys.argv[1:], 'u:p:')
+	login_opts, file_path = getopt.getopt(sys.argv[1:], 'u:p:g:')
 	wp_xml = file_path[0]
 	
 	for opt, value in login_opts:
@@ -26,11 +26,13 @@ try:
 			tumblr_credentials['email'] = value;
 		elif opt == '-p':
 			tumblr_credentials['password'] = value
+		elif opt == '-g':
+			tumblr_credentials['group'] = value.replace('http:', '').strip('/')
 except:
 	print USAGE
 	sys.exit(2)
 	
-if len(tumblr_credentials) != 2:
+if len(tumblr_credentials) < 2:
 	print USAGE
 	sys.exit(2)
 	
