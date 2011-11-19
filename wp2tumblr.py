@@ -20,7 +20,7 @@ USAGE = 'Useage: python wp2tumblr.py -u tumblr-email-address -p tumblr-passwordd
 try:
 	login_opts, file_path = getopt.getopt(sys.argv[1:], 'u:p:g:')
 	wp_xml = file_path[0]
-	
+
 	for opt, value in login_opts:
 		if opt == '-u':
 			tumblr_credentials['email'] = value;
@@ -31,15 +31,15 @@ try:
 except:
 	print USAGE
 	sys.exit(2)
-	
+
 if len(tumblr_credentials) < 2:
 	print USAGE
 	sys.exit(2)
-	
+
 if not os.path.exists(wp_xml):
 	print 'WordPress xml file ' + wp_xml + ' not found!'
 	sys.exit(2)
-	
+
 try:
 	dom = minidom.parse(wp_xml)
 except Exception, detail:
@@ -49,37 +49,42 @@ except Exception, detail:
 
 items = dom.getElementsByTagName('item')
 for item in items:
+	# only import published
 	if item.getElementsByTagName('wp:status')[0].firstChild.nodeValue != 'publish':
 		continue;
-	
+
+	# only import posts, not pages or other stuff
+	if item.getElementsByTagName('wp:post_type')[0].firstChild.nodeValue != 'post':
+		continue;
+
 	post = tumblr_credentials
 	post['type'] = 'text';
 	post['title'] = item.getElementsByTagName('title')[0].firstChild.nodeValue.strip()
 	post['date'] = item.getElementsByTagName('pubDate')[0].firstChild.nodeValue
-	
+
 	content = item.getElementsByTagName('content:encoded')[0].firstChild
-	
+
 	if content.__class__.__name__ != 'CDATASection':
 		continue
-		
+
 	post['body'] = item.getElementsByTagName('content:encoded')[0].firstChild.nodeValue
 	print post["body"]
-	
+
 	# deal with WordPress's stupid embedded Unicode characters
 	post = dict([(k,v.encode('utf-8') if type(v) is types.UnicodeType else v) for (k,v) in post.items()])
-	
+
 	data = urllib.urlencode(post) # Use urllib to encode the parameters
-	
+
 	try:
 		request = urllib2.Request(tumblr_api, data)
 		response = urllib2.urlopen(request) # This request is sent in HTTP POST
-		
+
 		page = response.read(200000)
 		print page
-	except Exception, detail: 
-		print detail 
+	except Exception, detail:
+		print detail
 		sys.exit(2)
-	
+
 	time.sleep(1) # don't overload the Tumblr API
-	
-	
+
+
