@@ -81,9 +81,15 @@ for item in items:
 
 		page = response.read(200000)
 		print page
-	except Exception, detail:
-		print detail
-		sys.exit(2)
+	except HTTPError, e:
+	    print 'The server couldn\'t fulfill the request.'
+	    print 'Error code: ', e.code
+	    print e.read()
+	    sys.exit(2)
+	except URLError, e:
+	    print 'We failed to reach a server.'
+	    print 'Reason: ', e.reason
+	    sys.exit(2)
 
 	time.sleep(1) # don't overload the Tumblr API
 
