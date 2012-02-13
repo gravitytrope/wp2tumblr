@@ -10,6 +10,7 @@ a Tumblr account. Everything will be posted as text.
 
 from xml.dom import minidom
 import urllib, urllib2, time, sys, os, getopt, types
+from urllib2 import URLError, HTTPError
 
 tumblr_credentials = {}
 tumblr_api = 'http://www.tumblr.com/api/write'
