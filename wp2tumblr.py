@@ -58,6 +58,9 @@ for item in items:
 	if item.getElementsByTagName('wp:post_type')[0].firstChild.nodeValue != 'post':
 		continue;
 
+	if len(item.getElementsByTagName('title')) == 0:
+		continue;
+
 	post = tumblr_credentials
 	post['type'] = 'text';
 	post['title'] = item.getElementsByTagName('title')[0].firstChild.nodeValue.strip()
