@@ -58,7 +58,7 @@ for item in items:
 	if item.getElementsByTagName('wp:post_type')[0].firstChild.nodeValue != 'post':
 		continue;
 
-	if len(item.getElementsByTagName('title')) == 0:
+	if len(item.getElementsByTagName('title')[0].childNodes) == 0:
 		continue;
 
 	post = tumblr_credentials
@@ -72,7 +72,7 @@ for item in items:
 		continue
 
 	post['body'] = item.getElementsByTagName('content:encoded')[0].firstChild.nodeValue
-	print post["body"]
+	print post["title"]
 
 	# deal with WordPress's stupid embedded Unicode characters
 	post = dict([(k,v.encode('utf-8') if type(v) is types.UnicodeType else v) for (k,v) in post.items()])
