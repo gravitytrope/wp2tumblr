@@ -63,7 +63,7 @@ for item in items:
 
 	post = tumblr_credentials
 	post['type'] = 'text';
-	post['title'] = item.getElementsByTagName('title')[0].firstChild.nodeValue.strip()
+	post['title'] = item.getElementsByTagName('title')[0].firstChild.nodeValue.strip().encode('utf-8', 'xmlcharrefreplace')
 	post['date'] = item.getElementsByTagName('pubDate')[0].firstChild.nodeValue
 
 	content = item.getElementsByTagName('content:encoded')[0].firstChild
@@ -71,7 +71,7 @@ for item in items:
 	if content.__class__.__name__ != 'CDATASection':
 		continue
 
-	post['body'] = item.getElementsByTagName('content:encoded')[0].firstChild.nodeValue
+	post['body'] = item.getElementsByTagName('content:encoded')[0].firstChild.nodeValue.encode('utf-8', 'xmlcharrefreplace')
 	print post["title"]
 
 	# deal with WordPress's stupid embedded Unicode characters
