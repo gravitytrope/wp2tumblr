@@ -13,13 +13,14 @@ import urllib, urllib2, time, sys, os, getopt, types
 from urllib2 import URLError, HTTPError
 
 tumblr_credentials = {}
+start_loop = 0
 tumblr_api = 'http://www.tumblr.com/api/write'
-USAGE = 'Useage: python wp2tumblr.py -u tumblr-email-address -p tumblr-passwordd [-g blog-url] wordpress-xml-export-path'
+USAGE = 'Useage: python wp2tumblr.py -u tumblr-email-address -p tumblr-passwordd [-g blog-url] [-s start-post] wordpress-xml-export-path'
 
 
 # check the command arguments
 try:
-	login_opts, file_path = getopt.getopt(sys.argv[1:], 'u:p:g:')
+	login_opts, file_path = getopt.getopt(sys.argv[1:], 'u:p:g:s:')
 	wp_xml = file_path[0]
 
 	for opt, value in login_opts:
@@ -29,6 +30,9 @@ try:
 			tumblr_credentials['password'] = value
 		elif opt == '-g':
 			tumblr_credentials['group'] = value.replace('http:', '').strip('/')
+		elif opt == '-s':
+			start_loop = int(value)
+
 except:
 	print USAGE
 	sys.exit(2)
@@ -49,7 +53,11 @@ except Exception, detail:
 	sys.exit(2)
 
 items = dom.getElementsByTagName('item')
-for item in items:
+total_post = items.length
+print "Total posts " + str(total_post)
+for x in xrange(start_loop,total_post):
+	print "start post number " + str(x)
+	item = items[x]
 	# only import published
 	if item.getElementsByTagName('wp:status')[0].firstChild.nodeValue != 'publish':
 		continue;
@@ -96,5 +104,3 @@ for item in items:
 	    sys.exit(2)
 
 	time.sleep(1) # don't overload the Tumblr API
-
-

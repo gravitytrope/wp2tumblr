@@ -13,7 +13,7 @@ Usage
 
 Run wp2python from the command line:
 
-```python wp2tumblr.py -u [tumblr email address] -p [tumblr passwordd] wordpress-xml-export-path```
+```python wp2tumblr.py -u [tumblr email address] -p [tumblr passwordd] [-s [start-postnumber]] wordpress-xml-export-path```
 
 Help
 ----
