@@ -3,6 +3,11 @@ Import a Wordpress Blog into Tumblr: wp2tumblr
 
 wp2tumblr is a simple Python script that will import a Wordpress XML export into Tumblr with publishing dates intact.
 
+Does not work!
+=====
+
+Tumblr recently disabled the API that this script depends on. Stay tuned for updates; in the meantime, wp2tumblr will no longer work.
+
 Requirements
 -------
 
